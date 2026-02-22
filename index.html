@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAC-Poqo Membership & Volunteer Application</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#001a0d;color:#fff;min-height:100vh}
+.header{background:linear-gradient(135deg,#004d26 0%,#006633 100%);padding:20px;text-align:center;border-bottom:3px solid #FFD700}
+.header img{height:80px;margin-bottom:10px}
+.header h1{color:#FFD700;font-size:1.8rem;margin-bottom:5px}
+.header p{color:#ccc;font-size:0.95rem}
+.nav{background:#002615;padding:10px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;border-bottom:2px solid #004d26}
+.nav button{background:#004d26;color:#FFD700;border:1px solid #FFD700;padding:8px 20px;border-radius:5px;cursor:pointer;font-size:0.9rem;transition:all 0.3s}
+.nav button:hover,.nav button.active{background:#FFD700;color:#004d26;font-weight:bold}
+.container{max-width:800px;margin:20px auto;padding:0 15px}
+.card{background:linear-gradient(135deg,#002615 0%,#003d1f 100%);border:1px solid #004d26;border-radius:10px;padding:25px;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.card h2{color:#FFD700;font-size:1.3rem;margin-bottom:15px;padding-bottom:8px;border-bottom:1px solid #004d26}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;color:#FFD700;margin-bottom:5px;font-weight:600;font-size:0.9rem}
+.form-group label .required{color:#ff6b6b}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;background:#001a0d;border:1px solid #004d26;border-radius:5px;color:#fff;font-size:0.95rem;transition:border-color 0.3s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#FFD700;box-shadow:0 0 5px rgba(255,215,0,0.3)}
+.form-group select option{background:#001a0d;color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:5px}
+.checkbox-group label{display:flex;align-items:center;gap:5px;color:#ccc;font-weight:normal;cursor:pointer;font-size:0.9rem}
+.checkbox-group input[type="checkbox"]{accent-color:#FFD700;width:16px;height:16px}
+.radio-group{display:flex;flex-wrap:wrap;gap:15px;margin-top:5px}
+.radio-group label{display:flex;align-items:center;gap:5px;color:#ccc;font-weight:normal;cursor:pointer;background:#001a0d;padding:10px 15px;border:1px solid #004d26;border-radius:5px;transition:all 0.3s;flex:1;min-width:150px}
+.radio-group label:hover{border-color:#FFD700}
+.radio-group input[type="radio"]{accent-color:#FFD700;width:16px;height:16px}
+.radio-group input[type="radio"]:checked+span{color:#FFD700;font-weight:600}
+.tier-info{font-size:0.8rem;color:#aaa;margin-top:2px;margin-left:21px}
+.btn{display:inline-block;padding:12px 30px;border:none;border-radius:5px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-transform:uppercase;letter-spacing:1px}
+.btn-primary{background:linear-gradient(135deg,#FFD700 0%,#e6c200 100%);color:#004d26}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(255,215,0,0.4)}
+.btn-danger{background:#dc3545;color:#fff}
+.btn-danger:hover{background:#c82333}
+.btn-block{width:100%;text-align:center}
+.error-msg{color:#ff6b6b;font-size:0.8rem;margin-top:3px;display:none}
+.terms-box{background:#001a0d;border:1px solid #004d26;border-radius:5px;padding:15px;margin-bottom:15px;max-height:200px;overflow-y:auto;font-size:0.85rem;color:#ccc;line-height:1.6}
+.success-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;justify-content:center;align-items:center;padding:20px}
+.success-content{background:linear-gradient(135deg,#002615 0%,#003d1f 100%);border:2px solid #FFD700;border-radius:15px;padding:30px;max-width:500px;width:100%;text-align:center;max-height:90vh;overflow-y:auto}
+.success-content h2{color:#FFD700;margin-bottom:15px}
+.success-content .checkmark{font-size:3rem;margin-bottom:10px}
+.success-content .banking{background:#001a0d;border:1px solid #004d26;border-radius:8px;padding:15px;margin:15px 0;text-align:left}
+.success-content .banking p{margin:5px 0;font-size:0.9rem;color:#ccc}
+.success-content .banking strong{color:#FFD700}
+.admin-section{display:none}
+.admin-login{max-width:400px;margin:50px auto;text-align:center}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:20px}
+.stat-card{background:#001a0d;border:1px solid #004d26;border-radius:8px;padding:15px;text-align:center}
+.stat-card .number{font-size:2rem;color:#FFD700;font-weight:bold}
+.stat-card .label{font-size:0.8rem;color:#aaa;margin-top:5px}
+.app-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:0.85rem}
+.app-table th{background:#004d26;color:#FFD700;padding:10px 8px;text-align:left;position:sticky;top:0}
+.app-table td{padding:8px;border-bottom:1px solid #004d26;color:#ccc}
+.app-table tr:hover{background:rgba(255,215,0,0.05)}
+.table-wrapper{overflow-x:auto;max-height:400px;overflow-y:auto;border:1px solid #004d26;border-radius:5px}
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.filter-row input,.filter-row select{padding:8px;background:#001a0d;border:1px solid #004d26;border-radius:5px;color:#fff;font-size:0.85rem}
+.status-badge{padding:3px 8px;border-radius:10px;font-size:0.75rem;font-weight:600}
+.status-pending{background:rgba(255,215,0,0.2);color:#FFD700}
+.status-approved{background:rgba(40,167,69,0.2);color:#28a745}
+.footer{text-align:center;padding:20px;color:#666;font-size:0.8rem;border-top:1px solid #004d26;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="header">
+<img src="https://revolutionarypacpoqo.com/WhatsApp_Image_2026-02-13_at_20.36.42-removebg-preview.png" alt="PAC-Poqo Logo" onerror="this.style.display='none'">
+<h1>Revolutionary PAC-Poqo of Occupied Azania</h1>
+<p>Membership & Volunteer Application Portal</p>
+</div>
+<div class="nav">
+<button class="active" onclick="showSection('form')">Application Form</button>
+<button onclick="showSection('admin')">Admin Portal</button>
+</div>
+
+<div id="formSection" class="container">
+<form id="applicationForm" onsubmit="return submitForm(event)">
+<div class="card">
+<h2>Application Type</h2>
+<div class="radio-group">
+<label><input type="radio" name="appType" value="Membership" required><span>Membership</span></label>
+<label><input type="radio" name="appType" value="Volunteer"><span>Volunteer</span></label>
+<label><input type="radio" name="appType" value="Both"><span>Both</span></label>
+</div>
+<div id="appTypeError" class="error-msg">Please select an application type</div>
+</div>
+
+<div class="card">
+<h2>Personal Information</h2>
+<div class="form-group">
+<label>Full Name <span class="required">*</span></label>
+<input type="text" id="fullName" required placeholder="Enter your full legal name">
+<div id="fullNameError" class="error-msg">Full name is required</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>Date of Birth <span class="required">*</span></label>
+<input type="date" id="dob" required>
+<div id="dobError" class="error-msg">Date of birth is required</div>
+</div>
+<div class="form-group">
+<label>Occupation <span class="required">*</span></label>
+<input type="text" id="occupation" required placeholder="Your current occupation">
+<div id="occupationError" class="error-msg">Occupation is required</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Contact Details</h2>
+<div class="form-row">
+<div class="form-group">
+<label>Email Address <span class="required">*</span></label>
+<input type="email" id="email" required placeholder="your.email@example.com">
+<div id="emailError" class="error-msg">Valid email is required</div>
+</div>
+<div class="form-group">
+<label>Phone Number <span class="required">*</span></label>
+<input type="tel" id="phone" required placeholder="+27 XX XXX XXXX">
+<div id="phoneError" class="error-msg">Phone number is required</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Electoral Location</h2>
+<p style="color:#aaa;font-size:0.85rem;margin-bottom:15px">Electoral location details are crucial for party organization and branch formation in your area.</p>
+<div class="form-group">
+<label>Physical Address <span class="required">*</span></label>
+<input type="text" id="address" required placeholder="Your street address">
+<div id="addressError" class="error-msg">Physical address is required</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>Province <span class="required">*</span></label>
+<select id="province" required onchange="updateMunicipalities()">
+<option value="">Select Province</option>
+<option value="Eastern Cape">Eastern Cape</option><option value="Free State">Free State</option><option value="Gauteng">Gauteng</option><option value="KwaZulu-Natal">KwaZulu-Natal</option><option value="Limpopo">Limpopo</option><option value="Mpumalanga">Mpumalanga</option><option value="Northern Cape">Northern Cape</option><option value="North West">North West</option><option value="Western Cape">Western Cape</option>
+</select>
+<div id="provinceError" class="error-msg">Province is required</div>
+</div>
+<div class="form-group">
+<label>Municipality <span class="required">*</span></label>
+<select id="municipality" required>
+<option value="">Select Municipality</option>
+</select>
+<div id="municipalityError" class="error-msg">Municipality is required</div>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label>Area / Township</label>
+<input type="text" id="area" placeholder="Enter your area, township, or village">
+</div>
+<div class="form-group">
+<label>Ward Number</label>
+<input type="text" id="ward" placeholder="Ward number">
+</div>
+</div>
+<div class="form-group" style="max-width:200px">
+<label>Postal Code</label>
+<input type="text" id="postalCode" placeholder="4-digit code" maxlength="4" pattern="[0-9]{4}">
+</div>
+</div>
+
+<div class="card" id="membershipCard">
+<h2>Membership Tier</h2>
+<div class="radio-group">
+<label><input type="radio" name="tier" value="Annual" checked><span>Annual Membership</span></label>
+<label><input type="radio" name="tier" value="Lifetime"><span>Lifetime Membership</span></label>
+</div>
+<div style="margin-top:10px;padding:10px;background:#001a0d;border-radius:5px;font-size:0.85rem;color:#aaa">
+<p><strong style="color:#FFD700">Annual:</strong> R150 per year</p>
+<p><strong style="color:#FFD700">Lifetime:</strong> R1,500 one-time payment</p>
+</div>
+</div>
+
+<div class="card" id="volunteerCard" style="display:none">
+<h2>Volunteer Availability</h2>
+<div class="form-group">
+<label>Available Days</label>
+<div class="checkbox-group">
+<label><input type="checkbox" name="days" value="Monday">Monday</label><label><input type="checkbox" name="days" value="Tuesday">Tuesday</label><label><input type="checkbox" name="days" value="Wednesday">Wednesday</label><label><input type="checkbox" name="days" value="Thursday">Thursday</label><label><input type="checkbox" name="days" value="Friday">Friday</label><label><input type="checkbox" name="days" value="Saturday">Saturday</label><label><input type="checkbox" name="days" value="Sunday">Sunday</label>
+</div>
+</div>
+<div class="form-group">
+<label>Available Hours Per Week</label>
+<input type="text" id="availableHours" placeholder="e.g., 10 hours">
+</div>
+</div>
+
+<div class="card">
+<h2>Terms & Conditions</h2>
+<div class="terms-box">
+<p><strong>PAC-Poqo Membership Terms and Conditions</strong></p>
+<p>By submitting this application, I hereby declare that:</p>
+<ul style="margin:10px 0 10px 20px">
+<li>All information provided is true and accurate to the best of my knowledge.</li>
+<li>I subscribe to the aims, objectives, and principles of the Revolutionary Pan Africanist Congress (PAC-Poqo) of Occupied Azania.</li>
+<li>I commit to upholding the values of unity, freedom, and self-determination for the African people.</li>
+<li>I understand that membership fees are non-refundable.</li>
+<li>I agree to abide by the constitution and regulations of the organization.</li>
+<li>I consent to the organization storing my personal information for administrative purposes.</li>
+<li>I understand that the organization reserves the right to accept or decline my application.</li>
+</ul>
+<p><strong>Payment Instructions:</strong> Upon approval, please make payment to FNB Account 63190898404, Branch Code 221126. Use your Initial+Surname+Subs as payment reference.</p>
+</div>
+<div class="form-group">
+<label class="checkbox-group" style="margin-top:10px">
+<input type="checkbox" id="terms" required>
+<span style="color:#ccc">I accept the Terms and Conditions <span class="required">*</span></span>
+</label>
+<div id="termsError" class="error-msg">You must accept the terms and conditions</div>
+</div>
+</div>
+
+<button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+</form>
+</div>
+
+<div id="adminSection" class="admin-section container">
+<div id="adminLogin" class="admin-login">
+<div class="card">
+<h2>Admin Login</h2>
+<div class="form-group">
+<label>Enter PIN</label>
+<input type="password" id="adminPin" placeholder="Enter admin PIN" maxlength="6">
+<div id="pinError" class="error-msg">Invalid PIN</div>
+</div>
+<button class="btn btn-primary btn-block" onclick="adminLogin()">Login</button>
+</div>
+</div>
+<div id="adminDashboard" style="display:none">
+<div class="card">
+<h2>Dashboard</h2>
+<div class="stats-grid">
+<div class="stat-card"><div class="number" id="statTotal">0</div><div class="label">Total Applications</div></div>
+<div class="stat-card"><div class="number" id="statMembership">0</div><div class="label">Membership</div></div>
+<div class="stat-card"><div class="number" id="statVolunteer">0</div><div class="label">Volunteer</div></div>
+<div class="stat-card"><div class="number" id="statBoth">0</div><div class="label">Both</div></div>
+</div>
+</div>
+<div class="card">
+<h2>Applications</h2>
+<div class="filter-row">
+<input type="text" id="searchInput" placeholder="Search name, email, phone..." oninput="filterApplications()" style="flex:1;min-width:200px">
+<select id="filterType" onchange="filterApplications()">
+<option value="">All Types</option>
+<option value="Membership">Membership</option>
+<option value="Volunteer">Volunteer</option>
+<option value="Both">Both</option>
+</select>
+<select id="filterProvince" onchange="filterApplications()">
+<option value="">All Provinces</option>
+<option value="Eastern Cape">Eastern Cape</option><option value="Free State">Free State</option><option value="Gauteng">Gauteng</option><option value="KwaZulu-Natal">KwaZulu-Natal</option><option value="Limpopo">Limpopo</option><option value="Mpumalanga">Mpumalanga</option><option value="Northern Cape">Northern Cape</option><option value="North West">North West</option><option value="Western Cape">Western Cape</option>
+</select>
+</div>
+<div class="table-wrapper">
+<table class="app-table">
+<thead><tr><th>Date</th><th>Name</th><th>Type</th><th>Email</th><th>Phone</th><th>Province</th><th>Municipality</th><th>Tier</th><th>Status</th></tr></thead>
+<tbody id="appTableBody"></tbody>
+</table>
+</div>
+</div>
+<button class="btn btn-danger" onclick="adminLogout()" style="margin-top:10px">Logout</button>
+</div>
+</div>
+
+<div class="success-overlay" id="successOverlay">
+<div class="success-content">
+<div class="checkmark">&#10004;</div>
+<h2>Application Submitted!</h2>
+<p style="color:#ccc;margin-bottom:15px">Thank you for your application. We will review it and contact you shortly.</p>
+<div class="banking">
+<p style="color:#FFD700;font-weight:bold;margin-bottom:10px">Banking Details for Payment:</p>
+<p><strong>Bank:</strong> First National Bank (FNB)</p>
+<p><strong>Account Number:</strong> 63190898404</p>
+<p><strong>Branch Code:</strong> 221126</p>
+<p><strong>Swift Code:</strong> FIRNZAJJ</p>
+<p><strong>Reference:</strong> <span id="paymentRef">InitialSurnameSubs</span></p>
+</div>
+<button class="btn btn-primary" onclick="closeSuccess()">Close</button>
+</div>
+</div>
+
+<div class="footer">
+<p>&copy; 2026 Revolutionary Pan Africanist Congress (PAC-Poqo) of Occupied Azania. All rights reserved.</p>
+<p style="margin-top:5px">Unity, Freedom, and Self-Determination for the African People</p>
+</div>
+
+<script>
+const municipalities = {"Eastern Cape":["Alfred Nzo","Amathole","Buffalo City Metro","Chris Hani","Joe Gqabi","Nelson Mandela Bay Metro","OR Tambo","Sarah Baartman"],"Free State":["Fezile Dabi","Lejweleputswa","Mangaung Metro","Thabo Mofutsanyane","Xhariep"],"Gauteng":["City of Ekurhuleni Metro","City of Johannesburg Metro","City of Tshwane Metro","Sedibeng","West Rand"],"KwaZulu-Natal":["Amajuba","eThekwini Metro","Harry Gwala","iLembe","King Cetshwayo","Ugu","uMgungundlovu","uMkhanyakude","uMzinyathi","uThukela","Zululand"],"Limpopo":["Capricorn","Mopani","Sekhukhune","Vhembe","Waterberg"],"Mpumalanga":["Ehlanzeni","Gert Sibande","Nkangala"],"Northern Cape":["Frances Baard","John Taolo Gaetsewe","Namakwa","Pixley ka Seme","ZF Mgcawu"],"North West":["Bojanala Platinum","Dr Kenneth Kaunda","Dr Ruth Segomotsi Mompati","Ngaka Modiri Molema"],"Western Cape":["Cape Winelands","Central Karoo","City of Cape Town Metro","Garden Route","Overberg","West Coast"]};
+
+function updateMunicipalities(){
+const p=document.getElementById('province').value;
+const m=document.getElementById('municipality');
+m.innerHTML='<option value="">Select Municipality</option>';
+if(p&&municipalities[p]){
+municipalities[p].forEach(function(name){
+const o=document.createElement('option');
+o.value=name;o.textContent=name;m.appendChild(o);
+});
+}
+}
+
+function showSection(s){
+document.getElementById('formSection').style.display=s==='form'?'block':'none';
+document.getElementById('adminSection').style.display=s==='admin'?'block':'none';
+document.querySelectorAll('.nav button').forEach(function(b,i){
+b.classList.toggle('active',(s==='form'&&i===0)||(s==='admin'&&i===1));
+});
+if(s==='admin'){document.getElementById('adminLogin').style.display='block';document.getElementById('adminDashboard').style.display='none';document.getElementById('adminPin').value='';}
+}
+
+document.querySelectorAll('input[name="appType"]').forEach(function(r){
+r.addEventListener('change',function(){
+const v=this.value;
+document.getElementById('membershipCard').style.display=(v==='Membership'||v==='Both')?'block':'none';
+document.getElementById('volunteerCard').style.display=(v==='Volunteer'||v==='Both')?'block':'none';
+});
+});
+
+function submitForm(e){
+e.preventDefault();
+const appType=document.querySelector('input[name="appType"]:checked');
+if(!appType){showError('appTypeError');return false;}
+const fields=['fullName','dob','occupation','email','phone','address','province','municipality'];
+let valid=true;
+fields.forEach(function(f){
+const el=document.getElementById(f);
+if(!el.value.trim()){showError(f+'Error');valid=false;}else{hideError(f+'Error');}
+});
+if(!document.getElementById('terms').checked){showError('termsError');valid=false;}else{hideError('termsError');}
+if(!valid)return false;
+
+const tier=document.querySelector('input[name="tier"]:checked');
+const days=[];
+document.querySelectorAll('input[name="days"]:checked').forEach(function(c){days.push(c.value);});
+
+const app={
+id:'PAC-'+Date.now(),
+date:new Date().toISOString(),
+appType:appType.value,
+fullName:document.getElementById('fullName').value.trim(),
+dob:document.getElementById('dob').value,
+occupation:document.getElementById('occupation').value.trim(),
+email:document.getElementById('email').value.trim(),
+phone:document.getElementById('phone').value.trim(),
+address:document.getElementById('address').value.trim(),
+province:document.getElementById('province').value,
+municipality:document.getElementById('municipality').value,
+area:document.getElementById('area').value.trim(),
+ward:document.getElementById('ward').value.trim(),
+postalCode:document.getElementById('postalCode').value.trim(),
+tier:tier?tier.value:'N/A',
+availableDays:days.join(', '),
+availableHours:document.getElementById('availableHours').value.trim(),
+status:'Pending'
+};
+
+let apps=JSON.parse(localStorage.getItem('pac_applications')||'[]');
+apps.push(app);
+localStorage.setItem('pac_applications',JSON.stringify(apps));
+
+const names=app.fullName.split(' ');
+const ref=names[0][0]+names[names.length-1]+'Subs';
+document.getElementById('paymentRef').textContent=ref;
+document.getElementById('successOverlay').style.display='flex';
+document.getElementById('applicationForm').reset();
+return false;
+}
+
+function showError(id){const e=document.getElementById(id);if(e)e.style.display='block';}
+function hideError(id){const e=document.getElementById(id);if(e)e.style.display='none';}
+function closeSuccess(){document.getElementById('successOverlay').style.display='none';}
+
+function adminLogin(){
+const pin=document.getElementById('adminPin').value;
+if(pin==='775798'){
+document.getElementById('adminLogin').style.display='none';
+document.getElementById('adminDashboard').style.display='block';
+hideError('pinError');
+loadDashboard();
+}else{showError('pinError');}
+}
+
+function adminLogout(){
+document.getElementById('adminLogin').style.display='block';
+document.getElementById('adminDashboard').style.display='none';
+}
+
+function loadDashboard(){
+const apps=JSON.parse(localStorage.getItem('pac_applications')||'[]');
+document.getElementById('statTotal').textContent=apps.length;
+document.getElementById('statMembership').textContent=apps.filter(function(a){return a.appType==='Membership';}).length;
+document.getElementById('statVolunteer').textContent=apps.filter(function(a){return a.appType==='Volunteer';}).length;
+document.getElementById('statBoth').textContent=apps.filter(function(a){return a.appType==='Both';}).length;
+renderTable(apps);
+}
+
+function renderTable(apps){
+const tbody=document.getElementById('appTableBody');
+tbody.innerHTML='';
+apps.sort(function(a,b){return new Date(b.date)-new Date(a.date);}).forEach(function(a){
+const tr=document.createElement('tr');
+tr.innerHTML='<td>'+new Date(a.date).toLocaleDateString()+'</td><td>'+a.fullName+'</td><td>'+a.appType+'</td><td>'+a.email+'</td><td>'+a.phone+'</td><td>'+a.province+'</td><td>'+a.municipality+'</td><td>'+(a.tier||'N/A')+'</td><td><span class="status-badge status-'+a.status.toLowerCase()+'">'+a.status+'</span></td>';
+tbody.appendChild(tr);
+});
+}
+
+function filterApplications(){
+const search=document.getElementById('searchInput').value.toLowerCase();
+const type=document.getElementById('filterType').value;
+const prov=document.getElementById('filterProvince').value;
+let apps=JSON.parse(localStorage.getItem('pac_applications')||'[]');
+apps=apps.filter(function(a){
+const matchSearch=!search||a.fullName.toLowerCase().includes(search)||a.email.toLowerCase().includes(search)||a.phone.includes(search);
+const matchType=!type||a.appType===type;
+const matchProv=!prov||a.province===prov;
+return matchSearch&&matchType&&matchProv;
+});
+renderTable(apps);
+}
+</script>
+</body>
+</html>
