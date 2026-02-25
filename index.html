@@ -74,6 +74,22 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#001a0d;color:#fff;min-h
 .confetti:nth-child(odd){animation:confetti-fall 3s ease-in forwards,confetti-shake 0.5s ease-in-out infinite}
 .confetti.rect{border-radius:2px}
 .confetti.circle{border-radius:50%}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    opacity: 0.8;
+    z-index: 1001;
+    pointer-events: none;
+    border-radius: 2px;
+}
+@keyframes fall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
 </style>
 </head>
 <body>
@@ -463,6 +479,24 @@ return matchSearch&&matchType&&matchProv;
 });
 renderTable(apps);
 }
+
+function launchConfetti() {
+    const container = document.getElementById('successOverlay');
+    const colors = ['#004d26', '#FFD700', '#FFFFFF'];
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-20px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = confetti.style.width;
+        confetti.style.animation = 'fall ' + (Math.random() * 3 + 2) + 's linear forwards';
+        container.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
 </script>
 </body>
 </html>
