@@ -75,21 +75,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#001a0d;color:#fff;min-h
 .confetti.rect{border-radius:2px}
 .confetti.circle{border-radius:50%}
 
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #f00;
-    opacity: 0.8;
-    z-index: 1001;
-    pointer-events: none;
-    border-radius: 2px;
-}
-@keyframes fall {
-    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-
 </style>
 </head>
 <body>
@@ -414,20 +399,22 @@ function launchConfetti(){
 var container=document.createElement('div');
 container.className='confetti-container';
 document.body.appendChild(container);
-var colors=['#004d26','#FFD700','#006633','#FFD700','#004d26','#FFFFFF','#FFD700'];
-var shapes=['rect','circle'];
-for(var i=0;i<80;i++){
+var colors=['#004d26','#FFD700','#006633','#FFD700','#FFFFFF','#FFD700','#004d26','#FFD700','#FFFFFF','#006633'];
+var shapes=['rect','circle','rect','circle','rect'];
+for(var i=0;i<120;i++){
 var c=document.createElement('div');
 c.className='confetti '+shapes[Math.floor(Math.random()*shapes.length)];
 c.style.left=Math.random()*100+'%';
 c.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-c.style.width=(Math.random()*8+6)+'px';
-c.style.height=(Math.random()*8+6)+'px';
-c.style.animationDelay=Math.random()*2+'s';
-c.style.animationDuration=(Math.random()*2+2.5)+'s';
+var size=(Math.random()*10+5)+'px';
+c.style.width=size;
+c.style.height=(Math.random()*12+6)+'px';
+c.style.animationDelay=(Math.random()*3)+'s';
+c.style.animationDuration=(Math.random()*3+2)+'s';
+c.style.opacity='1';
 container.appendChild(c);
 }
-setTimeout(function(){container.remove();},6000);
+setTimeout(function(){container.remove();},8000);
 }
 
 function closeSuccess(){document.getElementById('successOverlay').style.display='none';}
